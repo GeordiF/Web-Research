@@ -74,7 +74,7 @@ class PagesController extends Controller {
     public function readImageData() {
         $imageAnnotator = new ImageAnnotatorClient();
 
-        $path = "images/Calender-filled-in.jpg";
+        $path = "images/calender-filled-in.jpg";
         # annotate the image
         $image = file_get_contents($path);
         $response = $imageAnnotator->documentTextDetection($image);

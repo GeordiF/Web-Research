@@ -10653,8 +10653,14 @@ body {
 .content_block {
   width: 100%;
   margin-top: 2em;
-  padding-left: 5rem;
-  padding-right: 5rem;
+  padding: 10px;
+}
+
+@media (min-width: 992px) {
+  .content_block {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
 }
 
 .content_block a {

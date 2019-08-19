@@ -6,8 +6,12 @@ html, body {
 .content_block {
     width: 100%;
     margin-top: $margin-sm;
-    padding-left: 5rem;
-    padding-right: 5rem;
+    padding: $margin-xs;
+
+    @media(min-width: $screen-md){
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
 
     & a {
         margin-bottom: $margin-sm;
@@ -102,6 +106,7 @@ h2{
     }
 }
 .calender{
+
     iframe {
         width: 100%;
         min-height: 500px;

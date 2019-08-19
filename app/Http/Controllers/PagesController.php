@@ -2,30 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 # imports the Google Cloud client library
 use Google\Cloud\Vision\V1\ImageAnnotatorClient;
-use App\Library\Services\GoogleCalender;
+use Barryvdh\Debugbar\Facade as Debugbar;
+use Spatie\GoogleCalendar\Event;
 
 class PagesController extends Controller {
 
 
-    public function index(GoogleCalender $googleCalender) {
-
+    public function index() {
         session_start();
-        $client = $googleCalender->getClient();
 
-        if (isset($_SESSION['token'])) {
-            $client->setAccessToken($_SESSION['token']);
-        }
-
-        if ($client->getAccessToken()) {
-            print "yes";
-        }else
-        {
-            print "no";
-        }
-
+        $events = Event::get();
         $imageData = $this->readImageData();
 
         $activities = $imageData[0];
@@ -35,40 +25,9 @@ class PagesController extends Controller {
         return view('welcome', [
             'activities' => $activities,
             'Date' => $date,
-            'Path' => $path
+            'Path' => $path,
+            'Events' => $events,
         ]);
-    }
-
-    public function connect(GoogleCalender $googleCalender)
-    {
-        $client = $googleCalender->getClient();
-        $authUrl = $client->createAuthUrl();
-        return redirect($authUrl);
-    }
-
-    public function store(GoogleCalender $googleCalender)
-    {
-        $client = $googleCalender->getClient();
-        $authCode = request('code');
-        // Load previously authorized credentials from a file.
-        $credentialsPath = storage_path('keys/client_secret_generated.json');
-        // Exchange authorization code for an access token.
-        $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
-
-        // Store the credentials to disk.
-        if (!file_exists(dirname($credentialsPath))) {
-            mkdir(dirname($credentialsPath), 0700, true);
-        }
-        file_put_contents($credentialsPath, json_encode($accessToken));
-        return redirect('/')->with('message', 'Credentials saved');
-    }
-
-    public function getResources(GoogleCalender $googleCalender)
-    {
-        // Get the authorized client object and fetch the resources.
-        $client = $googleCalender->oauth();
-        return $googleCalender->getResource($client);
-
     }
 
     public function readImageData() {
@@ -83,8 +42,6 @@ class PagesController extends Controller {
         $block_text_array = [];
         $Date = [];
         $activities = [];
-        $hours = [];
-        $ToDos = [];
 
         # print out detailed and structured information about document text
         if ($annotation) {
@@ -124,16 +81,89 @@ class PagesController extends Controller {
         }
         $imageAnnotator->close();
 
-        foreach ($activities as $activity) {
-            $split_activity = explode(' UUR ', $activity);
-
-            array_push($hours, $split_activity[0]);
-            array_push($ToDos, $split_activity[1]);
-
-        }
 
         $date = implode(' ', $Date);
 
         return [$activities, $date, $path];
     }
+
+    public function createEvent() {
+        $hours = [];
+        $ToDos = [];
+
+        $data = $this->readImageData();
+
+        $activities = $data[0];
+        $date = $data[1];
+        $date= str_replace("\n", "", $date);
+        $date= str_replace("  ", " ", $date);
+
+        $dateArray = explode(" ", $date);
+
+        $day = $dateArray[0];
+        $month = $dateArray[1];
+        $year = $dateArray[2];
+
+        $monthNumber = null;
+
+        switch ($month) {
+            case 'JANUARY':
+                $monthNumber = "01";
+                break;
+            case 'FEBRUARY':
+                $monthNumber = "02";
+                break;
+            case 'MARCH':
+                $monthNumber = "03";
+                break;
+            case 'APRIL':
+                $monthNumber = "04";
+                break;
+            case 'MAY':
+                $monthNumber = "05";
+                break;
+            case 'JUNE':
+                $monthNumber = "06";
+                break;
+            case 'JULY':
+                $monthNumber = "07";
+                break;
+            case 'AUGUST':
+                $monthNumber = "08";
+                break;
+            case 'SEPTEMBER':
+                $monthNumber = "09";
+                break;
+            case 'OCTOBER':
+                $monthNumber = "10";
+                break;
+            case 'NOVEMBER':
+                $monthNumber = "11";
+                break;
+            case 'DECEMBER':
+                $monthNumber = "12";
+                break;
+            default:
+        }
+
+        foreach ($activities as $activity) {
+            $split_activity = explode(' UUR ', $activity);
+            $plusHour = $split_activity[0] + 1;
+
+            $dateTimeStringBegin = $year . '-' . $monthNumber . '-' . $day . ' ' . $split_activity[0] . ':00:00' ;
+            $dateTimeStringEnd = $year . '-' . $monthNumber . '-' . $day . ' ' . $plusHour . ':00:00' ;
+
+            $begin = Carbon::createFromFormat('Y-m-d H:i:s', $dateTimeStringBegin, 'Europe/Brussels');
+            $end = Carbon::createFromFormat('Y-m-d H:i:s', $dateTimeStringEnd, 'Europe/Brussels');
+
+            Event::create([
+                'name' => $split_activity[1],
+                'startDateTime' => $begin,
+                'endDateTime' => $end,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'The event has been created!');
+    }
+
 }

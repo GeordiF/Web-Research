@@ -10657,6 +10657,10 @@ body {
   padding-right: 5rem;
 }
 
+.content_block a {
+  margin-bottom: 2em;
+}
+
 .scanned_image-wrapper {
   padding-top: 2em;
   padding-bottom: 2em;

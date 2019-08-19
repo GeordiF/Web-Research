@@ -7,7 +7,7 @@ use Google_Client;
 class GoogleCalender {
 //Create getClient function.
 
-    public function getClient()
+    public static function getClient()
     {
         $client = new Google_Client();
         $client->setApplicationName(config('app.name'));
@@ -46,6 +46,7 @@ class GoogleCalender {
     //Create getResource function
     function getResource($client)
     {
+
         $service = new Google_Service_Calendar($client);
 
         // On the user's calenda print the next 10 events .

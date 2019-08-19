@@ -10683,6 +10683,22 @@ body {
   justify-content: space-between;
 }
 
+.image_upload {
+  width: 80%;
+  margin-top: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0px 0px 11px -3px rgba(0, 0, 0, 0.63);
+}
+
+.calender iframe {
+  width: 100%;
+  min-height: 500px;
+}
+
 .u-row .m-card {
   height: 100%;
 }

@@ -47,15 +47,17 @@
         </div>
     @endif
     <div class="u-row">
-        <div class="u-col-xs-12 u-col-md-4">
+        <div class="u-col-xs-12 u-col-lg-5 image_output">
             <h2>Scanned image output</h2>
             <h3>{{$Date}}</h3>
             @foreach($activities as $activity)
                 <p>{{$activity}}</p>
             @endforeach
-            <a class="btn btn-primary" href="{{action('PagesController@createEvent')}}" role="button">Yes, create these events!</a>
+            <div class="image_output-center">
+                <a class="btn btn-primary" href="{{action('PagesController@createEvent')}}" role="button">Yes, create these events!</a>
+            </div>
         </div>
-        <div class="u-col-xs-12 u-col-md-8 calender">
+        <div class="u-col-xs-12 u-col-lg-7 calender">
             <iframe src="https://calendar.google.com/calendar/embed?src=0qai6lrgia2vb21cp4uf4uasik%40group.calendar.google.com&ctz=Europe%2FBrussels" style="border: 0" frameborder="0" scrolling="no"></iframe>
         </div>
     </div>

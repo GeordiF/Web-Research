@@ -99,6 +99,18 @@ class PagesController extends Controller {
                 }
             }
         }
+
+        $activitiesLength = count($activities);
+
+        for ($i = 0; $i<$activitiesLength; $i++){
+            $activities[$i] = str_replace(" \n", "", $activities[$i]);
+
+            $hasActivity = explode("UUR", $activities[$i]);
+            if (!$hasActivity[1]){
+                unset($activities[$i]);
+            }
+        }
+
         $imageAnnotator->close();
 
 

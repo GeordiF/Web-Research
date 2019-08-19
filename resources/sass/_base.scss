@@ -29,6 +29,7 @@ html, body {
 }
 .scanned_image{
     width: 25%;
+    min-width: 270px;
     margin-left: auto;
     margin-right: auto;
     -webkit-box-shadow: 0px 0px 11px -3px rgba(0,0,0,0.63);
@@ -56,6 +57,50 @@ html, body {
     box-shadow: 0px 0px 11px -3px rgba(0,0,0,0.63);
 }
 
+h2{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: $margin-xsm;
+    text-align: center;
+
+    @media(min-width: $screen-lg) {
+        text-align: left;
+        margin-left: 0;
+    }
+}
+
+.image_output{
+
+    & p, h3 {
+        padding: $margin-xxs $margin-sm $margin-xxs $margin-sm;
+        width: 80%;
+        margin-right: auto;
+        margin-left: auto;
+        border-radius: 10px;
+        -webkit-box-shadow: 0px 0px 11px -3px rgba(0,0,0,0.63);
+        -moz-box-shadow: 0px 0px 11px -3px rgba(0,0,0,0.63);
+        box-shadow: 0px 0px 11px -3px rgba(0,0,0,0.63);
+
+        @media(min-width: $screen-lg) {
+            margin-left: 0;
+        }
+    }
+
+    & .image_output-center {
+        text-align: center;
+        border-radius: 10px;
+        @media(min-width: $screen-lg) {
+            text-align: left;
+        }
+        & a {
+            @media(min-width: $screen-lg) {
+                width: 80%;
+
+            }
+        }
+    }
+}
 .calender{
     iframe {
         width: 100%;

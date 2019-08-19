@@ -17,3 +17,4 @@ Route::get('/connect', 'PagesController@connect');
 Route::post('/connect', 'PagesController@store');
 Route::get('get-resource', 'PagesController@getResources');
 Route::get('create-event', 'PagesController@createEvent');
+Route::post('/', 'PagesController@storeImage');
